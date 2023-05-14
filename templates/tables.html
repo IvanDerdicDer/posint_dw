@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tables</title>
+    <link rel="stylesheet" href="../static/collapse.css">
+    <script src="../static/collapse.js"></script>
+</head>
+<body>
+<button type="button" class="collapsible" onclick="collapse(this)">Select a fact table:</button>
+<div class="content">
+    <form action="/tables" method="post">
+        <ul>
+            {% for table in fact_tables %}
+                <li><input type="radio" id="table{{ table['sifTablica'] }}" name="fact_table"
+                           value="{{ table['sifTablica'] }}">{{ table['nazTablica'] }}</li>
+            {% endfor %}
+        </ul>
+
+        <input type="submit" value="Submit">
+    </form>
+</div>
+{% if fact_table_mesures is defined and dimensions_and_columns_grouped is defined %}
+    <button type="button" class="collapsible" onclick="collapse(this)">Select {{ fact_table }} table columns:</button>
+    <form action="/generate_sql" method="post" class="content">
+        <button type="button" class="collapsible" onclick="collapse(this)">Mesures:</button>
+        <ul class="content">
+            {% for measure in fact_table_mesures %}
+                <li><input type="checkbox" id="measure{{ measure['sifTablica'] }}{{ measure['rbrAtrib'] }}"
+                           name="fact_table_mesures"
+                           value="mes|{{ measure['sifTablica'] }}|{{ measure['rbrAtrib'] }}">{{ measure['imeAtrib'] }}
+                </li>
+            {% endfor %}
+        </ul>
+        <button type="button" class="collapsible" onclick="collapse(this)">Dimensions:</button>
+        <ul class="content">
+            {% for key, val in dimensions_and_columns_grouped.items() %}
+                <li>
+                    <button type="button" class="collapsible" onclick="collapse(this)">{{ key.split('|')[2] }} table:</button>
+                    <ul class="content">
+                        {% for column in val %}
+                            <li><input type="checkbox" id="column{{ column['sifTablica'] }}{{ column['rbrAtrib'] }}"
+                                       name="dimension_columns"
+                                       value="dim|{{ column['sifTablica'] }}|{{ column['rbrAtrib'] }}">{{ column['imeAtrib'] }}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </li>
+            {% endfor %}
+        </ul>
+        <input type="submit" value="Submit">
+    </form>
+{% endif %}
+
+</body>
+</html>
