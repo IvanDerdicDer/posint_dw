@@ -1,0 +1,1 @@
+DRIVER={SQL Server};Server=localhost;Database=Northwind_derdicSP;UID=user1;PWD=user1login;Trusted_Connection=yes
